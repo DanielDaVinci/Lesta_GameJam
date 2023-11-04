@@ -9,7 +9,10 @@ void AMenuHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const auto menuWidget = CreateWidget(GetWorld(), MenuWidgetClass);
-	if (menuWidget)
-		menuWidget->AddToViewport();
+	if (MenuWidgetClass)
+	{
+		const auto menuWidget = CreateWidget(GetWorld(), MenuWidgetClass);
+		if (menuWidget)
+			menuWidget->AddToViewport();
+	}
 }

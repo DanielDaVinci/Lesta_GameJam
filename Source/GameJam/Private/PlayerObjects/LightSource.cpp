@@ -3,31 +3,37 @@
 
 #include "PlayerObjects/LightSource.h"
 
-// Sets default values
 ALightSource::ALightSource()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	BaseMesh = CreateDefaultSubobject<USkeletalMeshComponent>("TorchMesh");
 	SetRootComponent(BaseMesh);
 	
 	PointLight = CreateDefaultSubobject<UPointLightComponent>("TorchLight");
 	PointLight->SetupAttachment(BaseMesh);
-	PointLight->SetRelativeLocation(FVector(0, 0, 80));
+	PointLight->SetRelativeLocation(FVector(0, 0, 80.0f));
 }
 
-// Called when the game starts or when spawned
 void ALightSource::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ReloadTorch();
 }
 
-// Called every frame
-void ALightSource::Tick(float DeltaTime)
+void ALightSource::ReloadTorch()
 {
-	Super::Tick(DeltaTime);
-
+	PointLight->SetIntensity(6000);
+	GetWorldTimerManager().SetTimer(m_Timer, this, &ALightSource::DecreaseFire, 0.25, true, .0f);
 }
 
+void ALightSource::DecreaseFire()
+{
+	if (--m_nSec <= 0)
+	{
+		GetWorldTimerManager().ClearTimer(m_Timer);
+		Destroy();
+	}
+	PointLight->SetIntensity(PointLight->Intensity - 125);
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Intensity %f"), PointLight->Intensity));
+}

@@ -3,6 +3,7 @@
   <component name="UserContentModel">
     <attachedFolders />
     <explicitIncludes>
+      <Path>.clang-format</Path>
       <Path>.git</Path>
     </explicitIncludes>
     <explicitExcludes />

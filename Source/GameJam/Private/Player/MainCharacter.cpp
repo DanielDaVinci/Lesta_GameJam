@@ -20,6 +20,23 @@ AMainCharacter::AMainCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
+void AMainCharacter::AddBranch()
+{
+	currentBranches++;
+}
+
+void AMainCharacter::ReloadTorch()
+{
+	// TODO()
+}
+
+int32 AMainCharacter::PutAllBranches()
+{
+	const int32 amountBranches = currentBranches;
+	currentBranches = 0;
+	return amountBranches;
+}
+
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -42,11 +59,11 @@ void AMainCharacter::Tick(float DeltaTime)
 
 void AMainCharacter::Interact()
 {
-	OnInteract.Broadcast();
+	OnInteract.Broadcast(this);
 }
 
 void AMainCharacter::Reload()
 {
-	OnReload.Broadcast();
+	OnReload.Broadcast(this);
 }
 

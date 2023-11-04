@@ -3,11 +3,21 @@
 
 #include "Player/MainCharacter.h"
 
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+
 AMainCharacter::AMainCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComponent->SetupAttachment(GetRootComponent());
+	SpringArmComponent->SetRelativeRotation(FRotator(-45.0f, 0.0f, 0.0f));
+	SpringArmComponent->TargetArmLength = 500.0f;
+	SpringArmComponent->bDoCollisionTest = false;
+
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
 void AMainCharacter::BeginPlay()
@@ -16,15 +26,27 @@ void AMainCharacter::BeginPlay()
 	
 }
 
+void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AMainCharacter::Interact);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AMainCharacter::Reload);
+}
+
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMainCharacter::Interact()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	OnInteract.Broadcast();
+}
 
+void AMainCharacter::Reload()
+{
+	OnReload.Broadcast();
 }
 

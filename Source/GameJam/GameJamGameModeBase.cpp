@@ -9,7 +9,7 @@
 
 AGameJamGameModeBase::AGameJamGameModeBase()
 {
-	// DefaultPawnClass = AMainCharacter::StaticClass();
-	// PlayerControllerClass = AMainPlayerController::StaticClass();
+	DefaultPawnClass = AMainCharacter::StaticClass();
+	PlayerControllerClass = AMainPlayerController::StaticClass();
 	HUDClass = AGameHUD::StaticClass();
 }

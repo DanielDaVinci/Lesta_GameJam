@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "LightSource.generated.h"
+
+class UPowerComponent;
 
 UCLASS()
 class GAMEJAM_API ALightSource : public AActor
@@ -14,21 +15,21 @@ class GAMEJAM_API ALightSource : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ALightSource();
 
-	UPROPERTY(VisibleAnywhere)
-	USkeletalMeshComponent* BaseMesh;
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USceneComponent* SceneComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UPointLightComponent* PointLight;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPowerComponent* PowerComponent;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
 };

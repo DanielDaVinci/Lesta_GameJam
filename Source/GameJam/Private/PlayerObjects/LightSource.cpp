@@ -2,32 +2,28 @@
 
 
 #include "PlayerObjects/LightSource.h"
+#include "PowerComponent.h"
 
-// Sets default values
 ALightSource::ALightSource()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
-	BaseMesh = CreateDefaultSubobject<USkeletalMeshComponent>("TorchMesh");
-	SetRootComponent(BaseMesh);
+	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
+	SetRootComponent(SceneComponent);
+	
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("TorchMesh");
+	StaticMeshComponent->SetupAttachment(GetRootComponent());
 	
 	PointLight = CreateDefaultSubobject<UPointLightComponent>("TorchLight");
-	PointLight->SetupAttachment(BaseMesh);
+	PointLight->SetupAttachment(GetRootComponent());
 	PointLight->SetRelativeLocation(FVector(0, 0, 80));
+
+	PowerComponent = CreateDefaultSubobject<UPowerComponent>("PowerComponent");
 }
 
-// Called when the game starts or when spawned
 void ALightSource::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void ALightSource::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Campfire.generated.h"
 
+class UWidgetComponent;
 class UPowerComponent;
 class USphereComponent;
 class UPointLightComponent;
@@ -21,14 +22,42 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USceneComponent* SceneComponent;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* StaticMeshComponent;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UPointLightComponent* PointLightComponent;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USphereComponent* SphereComponent;
+	USphereComponent* LifeLightSphereComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USphereComponent* InteractSphereComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UWidgetComponent* InteractWidget;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UPowerComponent* PowerComponent;
-	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Power", meta = (ClampMin="0.0", ClampMax="1.0"))
+	float PercentOneBranch = 0.1f;
 	
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void NotifyActorBeginInteractOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION()
+	void NotifyActorEndInteractOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+private:
+	float MaxLifeLightRadius;
+	float MaxLightIntensity;
+
+	void SetInstanceOnGameMode();
+	void OnPowerChangeValue(float Percent);
+
+	void Interact(ACharacter* Character);
 };

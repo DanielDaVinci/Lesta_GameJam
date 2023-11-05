@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "GameSessionTimer/GameSessionTimer.h"
 #include "GameJamGameModeBase.generated.h"
 
 class ACampfire;
@@ -18,8 +19,16 @@ public:
 
 	void SetCampFire(ACampfire* NewCampFire) { Campfire = NewCampFire; }
 	ACampfire* GetCampfire() const { return Campfire; }
+	void SetGameSessionTimer(UGameSessionTimer* NewGameSessionTimer) { GameSessionTimer = NewGameSessionTimer; }
+	UGameSessionTimer* GetGameSessionTimer() const { return GameSessionTimer; }
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void StartPlay() override;
 	
 private:
 	UPROPERTY()
 	ACampfire* Campfire;
+	UPROPERTY()
+	UGameSessionTimer* GameSessionTimer;
 };

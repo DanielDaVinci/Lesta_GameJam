@@ -4,12 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "LightSource.generated.h"
 
-//class USkeletalMeshComponent;
-//class UPointLightComponent;
+class UPowerComponent;
 
 UCLASS()
 class GAMEJAM_API ALightSource : public AActor
@@ -19,18 +17,19 @@ class GAMEJAM_API ALightSource : public AActor
 public:	
 	ALightSource();
 
-	void ReloadTorch();
-
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USkeletalMeshComponent* BaseMesh;
+	USceneComponent* SceneComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UPointLightComponent* PointLight;
 
-	FTimerHandle m_Timer;
-	int32 m_nSec = 48;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPowerComponent* PowerComponent;
 
-	void DecreaseFire();
 	virtual void BeginPlay() override;
+
 };

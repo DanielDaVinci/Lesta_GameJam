@@ -6,8 +6,8 @@
 #include "GameFramework/Character.h"
 #include "MainCharacter.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnInteract, ACharacter*)
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnReload, ACharacter*)
+DECLARE_DELEGATE_OneParam(FOnInteract, ACharacter*)
+DECLARE_DELEGATE_OneParam(FOnReload, ACharacter*)
 
 class ALightSource;
 class UCameraComponent;
@@ -24,9 +24,13 @@ public:
 	
 	AMainCharacter();
 
-	void AddBranch();
+	UFUNCTION()
+	bool AddBranch();
+
+	int32 GetBranchesAmount() const { return currentBranches; };
+	void PutAllBranches();
+	
 	void ReloadTorch();
-	int32 PutAllBranches();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -39,7 +43,7 @@ protected:
 	TSubclassOf<ALightSource> LightSourceClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Objects")
-	FString LightSourceNameSocket = "WeaponSocket";
+	FName LightSourceSocketName = "TorchSocket";
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	int32 MaxAmountBranches = 4;
@@ -55,6 +59,7 @@ private:
 	int32 currentBranches = 0;
 	
 	void Interact();
-	
 	void Reload();
+
+	void CreateLightSource();
 };

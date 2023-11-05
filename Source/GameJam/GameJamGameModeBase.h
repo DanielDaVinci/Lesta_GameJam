@@ -6,9 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameJamGameModeBase.generated.h"
 
-/**
- * 
- */
+class ACampfire;
+
 UCLASS()
 class GAMEJAM_API AGameJamGameModeBase : public AGameModeBase
 {
@@ -16,4 +15,11 @@ class GAMEJAM_API AGameJamGameModeBase : public AGameModeBase
 
 public:
 	AGameJamGameModeBase();
+
+	void SetCampFire(ACampfire* NewCampFire) { Campfire = NewCampFire; }
+	ACampfire* GetCampfire() const { return Campfire; }
+	
+private:
+	UPROPERTY()
+	ACampfire* Campfire;
 };

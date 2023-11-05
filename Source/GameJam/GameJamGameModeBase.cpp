@@ -13,3 +13,4 @@ AGameJamGameModeBase::AGameJamGameModeBase()
 	PlayerControllerClass = AMainPlayerController::StaticClass();
 	HUDClass = AGameHUD::StaticClass();
 }
+

@@ -3,8 +3,10 @@
 
 #include "Player/MainCharacter.h"
 
+#include "LightSource.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameJam/GameJamGameModeBase.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -20,9 +22,16 @@ AMainCharacter::AMainCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
-void AMainCharacter::AddBranch()
+bool AMainCharacter::AddBranch()
 {
+	if (currentBranches >= MaxAmountBranches)
+		return false;
+
+	// TODO(Animation)
+
 	currentBranches++;
+	UE_LOG(LogTemp, Display, TEXT("%i"), currentBranches);
+	return true;
 }
 
 void AMainCharacter::ReloadTorch()
@@ -30,17 +39,18 @@ void AMainCharacter::ReloadTorch()
 	// TODO()
 }
 
-int32 AMainCharacter::PutAllBranches()
+void AMainCharacter::PutAllBranches()
 {
-	const int32 amountBranches = currentBranches;
+	// TODO(Animation)
+
 	currentBranches = 0;
-	return amountBranches;
 }
 
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CreateLightSource();
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -54,16 +64,28 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AMainCharacter::Interact()
 {
-	OnInteract.Broadcast(this);
+	OnInteract.ExecuteIfBound(this);
 }
 
 void AMainCharacter::Reload()
 {
-	OnReload.Broadcast(this);
+	OnReload.ExecuteIfBound(this);
 }
 
+void AMainCharacter::CreateLightSource()
+{
+	if (!GetWorld() || !GetMesh())
+		return;
+
+	const auto LightSource = GetWorld()->SpawnActor<ALightSource>(LightSourceClass);
+	if (!LightSource)
+		return;
+
+	LightSource->SetOwner(this);
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
+	LightSource->AttachToComponent(GetMesh(), AttachmentRules, LightSourceSocketName);
+}

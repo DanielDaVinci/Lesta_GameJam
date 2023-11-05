@@ -6,22 +6,38 @@
 #include "GameFramework/Actor.h"
 #include "PowerPickup.generated.h"
 
+class UWidgetComponent;
+class UBoxComponent;
+
 UCLASS()
 class GAMEJAM_API APowerPickup : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	APowerPickup();
 
 protected:
-	UStaticMeshComponent* staticMeshComponent;
-	// Called when the game starts or when spawned
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USceneComponent* SceneComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UBoxComponent* BoxCollision;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UWidgetComponent* InteractWidget;
+	
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+private:
 
+	UFUNCTION()
+	void Pickup(ACharacter* Character);
+
+	bool CanPickup() const;
 };

@@ -4,17 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "PlayerWidget.generated.h"
+#include "CampfireWidget.generated.h"
 
 UCLASS()
-class GAMEJAM_API UPlayerWidget : public UUserWidget
+class GAMEJAM_API UCampfireWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	bool IsPlayerInLight() const;
-
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	bool IsTimerEnd() const;
+	float GetCampfirePower(int32 ProgressIndex) const;
 };

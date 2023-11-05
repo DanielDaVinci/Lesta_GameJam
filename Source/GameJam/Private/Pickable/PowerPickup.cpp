@@ -76,8 +76,7 @@ void APowerPickup::Pickup(ACharacter* Character)
 
 	if (MainCharacter->AddBranch())
 	{
-		StaticMeshComponent->SetVisibility(false);
-		InteractWidget->SetVisibility(false);
+		Destroy();
 	}
 }
 

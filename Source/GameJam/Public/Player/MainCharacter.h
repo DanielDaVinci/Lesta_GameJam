@@ -22,21 +22,21 @@ class GAMEJAM_API AMainCharacter : public ACharacter
 public:
 	FOnInteract OnInteract;
 	FOnReload OnReload;
-	
+
 	AMainCharacter();
 
 	UFUNCTION(BlueprintCallable)
 	bool HaveLightSource() const { return currentLightSource != nullptr; }
 
-	UFUNCTION()
-	bool AddBranch();
-
 	int32 GetBranchesAmount() const { return currentBranches; }
 	int32 GetMaxBranchesAmount() const { return MaxAmountBranches; }
-	
+	ALightSource* GetCurrentLightSource();
+
+	bool AddBranch();
 	void PutAllBranches();
 	void ExternalReloadTorch();
-	ALightSource* GetCurrentLightSource();
+
+	bool InLight();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -59,11 +59,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	USoundCue* AddBranchesToCampfireSC;
-	
+
 	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
+
 public:
 	virtual void Tick(float DeltaTime) override;
 
@@ -75,14 +75,12 @@ private:
 
 	void SetCurrentBranches(int32 Amount);
 	void SetDecelerationMovement(int32 Amount);
-	
+
 	void Interact();
 	void Reload();
-	
+
 	void InternalReloadTorch();
-	
+
 	void AttachNewLightSource();
 	void OnTorchBurnOut();
-	
-	bool InLight();
 };

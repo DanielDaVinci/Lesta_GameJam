@@ -5,6 +5,7 @@
 
 #include "LightSource.h"
 #include "Camera/CameraComponent.h"
+#include "CentralObjects/Campfire.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameJam/GameJamGameModeBase.h"
@@ -153,5 +154,8 @@ void AMainCharacter::SetDecelerationMovement(int32 Amount)
 
 bool AMainCharacter::InLight()
 {
-	return true;
+	TArray<AActor*> overlappingActors;
+	GetOverlappingActors(overlappingActors, ACampfire::StaticClass());
+
+	return overlappingActors.Num() != 0 || currentLightSource;
 }

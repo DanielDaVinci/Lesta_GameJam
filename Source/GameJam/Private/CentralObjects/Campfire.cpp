@@ -114,10 +114,10 @@ void ACampfire::OnPowerChangeValue(float Percent)
 {
 	float newRadius = Percent * MaxLifeLightRadius;
 	PointLightComponent->SetAttenuationRadius(newRadius);
+	LifeLightSphereComponent->SetSphereRadius(newRadius);
 
 	float newIntensity = Percent * MaxLightIntensity;
 	PointLightComponent->SetIntensity(newIntensity);
-	UE_LOG(LogTemp, Display, TEXT("%f"), Percent);
 }
 
 void ACampfire::Interact(ACharacter* Character)
@@ -130,6 +130,7 @@ void ACampfire::Interact(ACharacter* Character)
 	MainCharacter->PutAllBranches();
 
 	InteractWidget->SetVisibility(false);
+	MainCharacter->OnInteract.Unbind();
 }
 
 void ACampfire::Reload(ACharacter* Character)

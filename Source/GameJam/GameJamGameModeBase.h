@@ -19,16 +19,23 @@ public:
 
 	void SetCampFire(ACampfire* NewCampFire) { Campfire = NewCampFire; }
 	ACampfire* GetCampfire() const { return Campfire; }
-	void SetGameSessionTimer(UGameSessionTimer* NewGameSessionTimer) { GameSessionTimer = NewGameSessionTimer; }
-	UGameSessionTimer* GetGameSessionTimer() const { return GameSessionTimer; }
+	
+	FString GetCurrentTime() const;
+
+	void SetGameInput() const;
+	void SetUIInput() const;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<UGameSessionTimer> GameSessionTimerClass;
+	
 	virtual void BeginPlay() override;
 	virtual void StartPlay() override;
 	
 private:
 	UPROPERTY()
 	ACampfire* Campfire;
+	
 	UPROPERTY()
 	UGameSessionTimer* GameSessionTimer;
 };

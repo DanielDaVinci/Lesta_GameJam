@@ -6,24 +6,28 @@
 #include "GameFramework/Actor.h"
 #include "GameSessionTimer.generated.h"
 
-DECLARE_DELEGATE_OneParam(FOnTimeTick, int32)
-
 UCLASS()
 class GAMEJAM_API UGameSessionTimer : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	FOnTimeTick OnTimeTick;
-	int32 TimeRemain = 10;
-	UGameSessionTimer();
-	FString GetCurrentTime();
+	FString GetCurrentTime() const;
+	
 	void InitializeTimer(UWorld* world);
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game")
+	int32 GameSessionTime = 300;
+
 private:
+	FTimerHandle Handle;
+	int32 TimeRemain = 300;
+	
 	UPROPERTY()
 	UWorld* World;
-	FTimerHandle Handle;
-	void SetInstanceOnGameMode();
+	
 	void OnTimerTicked();
+	
+	bool PlayerInLight() const;
 };

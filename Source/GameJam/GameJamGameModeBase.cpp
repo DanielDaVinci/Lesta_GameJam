@@ -15,15 +15,54 @@ AGameJamGameModeBase::AGameJamGameModeBase()
 	HUDClass = AGameHUD::StaticClass();
 }
 
+FString AGameJamGameModeBase::GetCurrentTime() const
+{
+	if (!GameSessionTimer)
+		return "00 : 00";
+
+	return GameSessionTimer->GetCurrentTime();
+}
+
 void AGameJamGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	GameSessionTimer = NewObject<UGameSessionTimer>();
+
+	if (GameSessionTimerClass)
+	{
+		GameSessionTimer = NewObject<UGameSessionTimer>(this, GameSessionTimerClass);
+		GameSessionTimer->InitializeTimer(GetWorld());
+	}
 }
 
 void AGameJamGameModeBase::StartPlay()
 {
 	Super::StartPlay();
-	GameSessionTimer->InitializeTimer(GetWorld());
+
+	if (GameSessionTimer)
+	{
+		// GameSessionTimer->InitializeTimer(GetWorld());
+	}
+
+	SetGameInput();
+}
+
+void AGameJamGameModeBase::SetGameInput() const
+{
+	const auto playerController = GetWorld()->GetFirstPlayerController();
+	if (!playerController)
+		return;
+	
+	playerController->SetInputMode(FInputModeGameOnly());
+	playerController->SetShowMouseCursor(false);
+}
+
+void AGameJamGameModeBase::SetUIInput() const
+{
+	const auto playerController = GetWorld()->GetFirstPlayerController();
+	if (!playerController)
+		return;
+	
+	playerController->SetInputMode(FInputModeUIOnly());
+	playerController->SetShowMouseCursor(true);
 }
 

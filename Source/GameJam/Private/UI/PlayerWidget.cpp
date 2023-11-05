@@ -2,20 +2,27 @@
 
 
 #include "UI/PlayerWidget.h"
+
+#include "MainCharacter.h"
 #include "../GameJamGameModeBase.h"
-#include "Components/PowerComponent.h"
-#include "CentralObjects/Campfire.h"
 
-float UPlayerWidget::GetCampfirePower(int32 ProgressIndex) const
+bool UPlayerWidget::IsPlayerInLight() const
 {
-    const auto GameMode = Cast<AGameJamGameModeBase>(GetWorld()->GetAuthGameMode());
-    const ACampfire* Campfire = GameMode->GetCampfire();
-    if (!Campfire) return 0.0f;
+	const auto player = Cast<AMainCharacter>(GetOwningPlayerPawn());
+	if (!player)
+		return false;
 
-    const auto Component = Campfire->GetComponentByClass(UPowerComponent::StaticClass());
-    const auto PowerComponent = Cast<UPowerComponent>(Component);
-    if (!PowerComponent) return 0.0f;
-    
-    const float CurProgPower = PowerComponent->GetPower() * 10 - ProgressIndex;
-    return CurProgPower;
+	return player->InLight();
+}
+
+bool UPlayerWidget::IsTimerEnd() const
+{
+	if (!GetWorld() || !GetWorld()->GetAuthGameMode())
+		return false;
+
+	const auto gameMode = Cast<AGameJamGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!gameMode)
+		return false;
+
+	return gameMode->GetCurrentTime() == "00 : 00";
 }

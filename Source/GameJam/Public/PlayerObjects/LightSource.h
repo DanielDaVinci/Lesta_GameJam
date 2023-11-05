@@ -8,27 +8,29 @@
 #include "Components/PointLightComponent.h"
 #include "LightSource.generated.h"
 
+//class USkeletalMeshComponent;
+//class UPointLightComponent;
+
 UCLASS()
 class GAMEJAM_API ALightSource : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ALightSource();
 
-	UPROPERTY(VisibleAnywhere)
-	USkeletalMeshComponent* BaseMesh;
-
-	UPROPERTY(VisibleAnywhere)
-	UPointLightComponent* PointLight;
+	void ReloadTorch();
 
 protected:
-	// Called when the game starts or when spawned
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USkeletalMeshComponent* BaseMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPointLightComponent* PointLight;
+
+	FTimerHandle m_Timer;
+	int32 m_nSec = 48;
+
+	void DecreaseFire();
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 };

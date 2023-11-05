@@ -19,8 +19,11 @@ public:
 	FOnPowerEnd OnPowerEnd;
 
 	UPowerComponent();
+
+	float GetPercentCurrentPower() const { return currentPower / BurningTime; };
 	
 	void AddPower(float Percent);
+	void SetPower(float Percent);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Power", meta = (ClampMin = "0.0"))

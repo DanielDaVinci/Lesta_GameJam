@@ -10,7 +10,13 @@ UPowerComponent::UPowerComponent()
 
 void UPowerComponent::AddPower(float Percent)
 {
-	currentPower = FMath::Clamp(currentPower + Percent, 0.0f, 1.0f);
+	SetPower(currentPower + Percent);
+}
+
+void UPowerComponent::SetPower(float Percent)
+{
+	currentPower = FMath::Clamp(Percent, 0.0f, 1.0f);
+	OnValueUpdate.ExecuteIfBound(currentPower);
 }
 
 
@@ -36,8 +42,6 @@ void UPowerComponent::PowerTimerUpdate()
 	const float timerDecrement = TimeUpdateValueFrequency / BurningTime;
 	currentPower -= timerDecrement;
 	currentPower = FMath::Max(currentPower, 0.0f);
-
-	OnValueUpdate.ExecuteIfBound(currentPower);
 
 	if (currentPower <= 0.0f)
 	{

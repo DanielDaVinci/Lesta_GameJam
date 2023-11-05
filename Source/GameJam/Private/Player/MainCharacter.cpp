@@ -5,6 +5,7 @@
 
 #include "LightSource.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameJam/GameJamGameModeBase.h"
 
@@ -29,28 +30,46 @@ bool AMainCharacter::AddBranch()
 
 	// TODO(Animation)
 
-	currentBranches++;
-	UE_LOG(LogTemp, Display, TEXT("%i"), currentBranches);
+	SetCurrentBranches(currentBranches + 1);
 	return true;
-}
-
-void AMainCharacter::ReloadTorch()
-{
-	// TODO()
 }
 
 void AMainCharacter::PutAllBranches()
 {
 	// TODO(Animation)
 
-	currentBranches = 0;
+	SetCurrentBranches(0);
+}
+
+void AMainCharacter::ExternalReloadTorch()
+{
+	// TODO(Animation)
+	
+	if (currentLightSource)
+	{
+		currentLightSource->Repower();
+	}
+	else
+	{
+		AttachNewLightSource();
+	}
+}
+
+void AMainCharacter::InternalReloadTorch()
+{
+	if (currentBranches == 0)
+		return;
+	
+	SetCurrentBranches(currentBranches - 1);
+	AttachNewLightSource();
 }
 
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CreateLightSource();
+	currentBranches = 0;
+	currentLightSource = nullptr;
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -73,19 +92,59 @@ void AMainCharacter::Interact()
 
 void AMainCharacter::Reload()
 {
-	OnReload.ExecuteIfBound(this);
+	if (!OnReload.ExecuteIfBound(this))
+	{
+		InternalReloadTorch();
+	}
 }
 
-void AMainCharacter::CreateLightSource()
+void AMainCharacter::AttachNewLightSource()
 {
 	if (!GetWorld() || !GetMesh())
 		return;
 
-	const auto LightSource = GetWorld()->SpawnActor<ALightSource>(LightSourceClass);
-	if (!LightSource)
+	if (currentLightSource)
+	{
+		currentLightSource->Detach();
+		currentLightSource->OnBurnOut.Unbind();
+		currentLightSource = nullptr;
+	}
+	
+	currentLightSource = GetWorld()->SpawnActor<ALightSource>(LightSourceClass);
+	if (!currentLightSource)
 		return;
 
-	LightSource->SetOwner(this);
-	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-	LightSource->AttachToComponent(GetMesh(), AttachmentRules, LightSourceSocketName);
+	currentLightSource->SetOwner(this);
+	FAttachmentTransformRules attachmentRules(EAttachmentRule::SnapToTarget, false);
+	currentLightSource->AttachToComponent(GetMesh(), attachmentRules, LightSourceSocketName);
+
+	currentLightSource->OnBurnOut.BindUObject(this, &AMainCharacter::OnTorchBurnOut);
+}
+
+void AMainCharacter::OnTorchBurnOut()
+{
+	currentLightSource->Detach();
+	currentLightSource->OnBurnOut.Unbind();
+	currentLightSource = nullptr;
+}
+
+void AMainCharacter::SetCurrentBranches(int32 Amount)
+{
+	currentBranches = Amount;
+	SetDecelerationMovement(currentBranches);
+}
+
+void AMainCharacter::SetDecelerationMovement(int32 Amount)
+{
+	if (!GetCharacterMovement())
+		return;
+
+	static float MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed - Amount * DecelerationMovementOneBranch;
+}
+
+bool AMainCharacter::InLight()
+{
+	return true;
 }

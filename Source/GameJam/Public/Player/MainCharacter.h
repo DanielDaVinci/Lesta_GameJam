@@ -24,13 +24,17 @@ public:
 	
 	AMainCharacter();
 
+	UFUNCTION(BlueprintCallable)
+	bool HaveLightSource() const { return currentLightSource != nullptr; }
+
 	UFUNCTION()
 	bool AddBranch();
 
-	int32 GetBranchesAmount() const { return currentBranches; };
-	void PutAllBranches();
+	int32 GetBranchesAmount() const { return currentBranches; }
+	int32 GetMaxBranchesAmount() const { return MaxAmountBranches; }
 	
-	void ReloadTorch();
+	void PutAllBranches();
+	void ExternalReloadTorch();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -48,18 +52,32 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	int32 MaxAmountBranches = 4;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+	float DecelerationMovementOneBranch = 50.0f;
+	
 	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
+	
 public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
 	int32 currentBranches = 0;
+
+	UPROPERTY()
+	ALightSource* currentLightSource;
+
+	void SetCurrentBranches(int32 Amount);
+	void SetDecelerationMovement(int32 Amount);
 	
 	void Interact();
 	void Reload();
-
-	void CreateLightSource();
+	
+	void InternalReloadTorch();
+	
+	void AttachNewLightSource();
+	void OnTorchBurnOut();
+	
+	bool InLight();
 };

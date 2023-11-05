@@ -43,6 +43,12 @@ ACampfire::ACampfire()
 	InteractWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	InteractWidget->SetDrawAtDesiredSize(true);
 	InteractWidget->SetVisibility(false);
+
+	ReloadWidget = CreateDefaultSubobject<UWidgetComponent>("ReloadWidgetComponent");
+	ReloadWidget->SetupAttachment(GetRootComponent());
+	ReloadWidget->SetWidgetSpace(EWidgetSpace::Screen);
+	ReloadWidget->SetDrawAtDesiredSize(true);
+	ReloadWidget->SetVisibility(false);
 	
 	PowerComponent = CreateDefaultSubobject<UPowerComponent>("PowerComponent");
 }
@@ -54,6 +60,9 @@ void ACampfire::NotifyActorBeginInteractOverlap(UPrimitiveComponent* OverlappedC
 	if (!MainCharacter)
 		return;
 
+	ReloadWidget->SetVisibility(true);
+	MainCharacter->OnReload.BindUObject(this, &ACampfire::Reload);
+	
 	if (MainCharacter->GetBranchesAmount() == 0)
 		return;
 	
@@ -70,6 +79,9 @@ void ACampfire::NotifyActorEndInteractOverlap(UPrimitiveComponent* OverlappedCom
 
 	InteractWidget->SetVisibility(false);
 	MainCharacter->OnInteract.Unbind();
+	
+	ReloadWidget->SetVisibility(false);
+	MainCharacter->OnReload.Unbind();
 }
 
 void ACampfire::BeginPlay()
@@ -117,5 +129,14 @@ void ACampfire::Interact(ACharacter* Character)
 	MainCharacter->PutAllBranches();
 
 	InteractWidget->SetVisibility(false);
+}
+
+void ACampfire::Reload(ACharacter* Character)
+{
+	const auto MainCharacter = Cast<AMainCharacter>(Character);
+	if (!MainCharacter)
+		return;
+	
+	MainCharacter->ExternalReloadTorch();
 }
 

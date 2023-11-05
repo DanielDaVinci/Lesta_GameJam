@@ -37,6 +37,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UWidgetComponent* InteractWidget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UWidgetComponent* ReloadWidget;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UPowerComponent* PowerComponent;
@@ -60,4 +63,5 @@ private:
 	void OnPowerChangeValue(float Percent);
 
 	void Interact(ACharacter* Character);
+	void Reload(ACharacter* Character);
 };

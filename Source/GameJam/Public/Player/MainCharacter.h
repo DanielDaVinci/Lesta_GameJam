@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Sound/SoundCue.h"
 #include "MainCharacter.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnInteract, ACharacter*)
@@ -54,6 +55,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	float DecelerationMovementOneBranch = 50.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+	USoundCue* AddBranchesToCampfireSC;
 	
 	virtual void BeginPlay() override;
 

@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameJam/GameJamGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 AMainCharacter::AMainCharacter()
 {
@@ -38,6 +39,7 @@ void AMainCharacter::PutAllBranches()
 {
 	// TODO(Animation)
 
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), AddBranchesToCampfireSC, GetActorLocation());
 	SetCurrentBranches(0);
 }
 

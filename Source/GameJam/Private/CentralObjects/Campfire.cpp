@@ -117,6 +117,7 @@ void ACampfire::OnPowerChangeValue(float Percent)
 
 	float newIntensity = Percent * MaxLightIntensity;
 	PointLightComponent->SetIntensity(newIntensity);
+	UE_LOG(LogTemp, Display, TEXT("%f"), Percent);
 }
 
 void ACampfire::Interact(ACharacter* Character)

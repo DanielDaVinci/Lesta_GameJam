@@ -40,9 +40,8 @@ void UPowerComponent::StartPowerTimer()
 void UPowerComponent::PowerTimerUpdate()
 {
 	const float timerDecrement = TimeUpdateValueFrequency / BurningTime;
-	currentPower -= timerDecrement;
-	currentPower = FMath::Max(currentPower, 0.0f);
-
+	SetPower(currentPower - timerDecrement);
+	
 	if (currentPower <= 0.0f)
 	{
 		if (!GetOwner())

@@ -4,14 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "PlayerWidget.generated.h"
+#include "TorchWidget.generated.h"
 
 UCLASS()
-class GAMEJAM_API UPlayerWidget : public UUserWidget
+class GAMEJAM_API UTorchWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	float GetCampfirePower(int32 ProgressIndex) const;
+	float GetTorchPower() const;
+	
 };

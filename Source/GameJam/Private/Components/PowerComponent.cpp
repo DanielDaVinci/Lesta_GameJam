@@ -19,6 +19,11 @@ void UPowerComponent::SetPower(float Percent)
 	OnValueUpdate.ExecuteIfBound(currentPower);
 }
 
+float UPowerComponent::GetPower()
+{
+	return currentPower;
+}
+
 
 void UPowerComponent::BeginPlay()
 {

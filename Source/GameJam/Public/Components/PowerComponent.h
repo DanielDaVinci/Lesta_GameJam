@@ -24,6 +24,7 @@ public:
 	
 	void AddPower(float Percent);
 	void SetPower(float Percent);
+	float GetPower();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Power", meta = (ClampMin = "0.0"))

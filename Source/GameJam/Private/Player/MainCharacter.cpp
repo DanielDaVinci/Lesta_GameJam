@@ -57,6 +57,11 @@ void AMainCharacter::ExternalReloadTorch()
 	}
 }
 
+ALightSource* AMainCharacter::GetCurrentLightSource()
+{
+	return currentLightSource;
+}
+
 void AMainCharacter::InternalReloadTorch()
 {
 	if (currentBranches == 0)

@@ -36,6 +36,7 @@ public:
 	
 	void PutAllBranches();
 	void ExternalReloadTorch();
+	ALightSource* GetCurrentLightSource();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")

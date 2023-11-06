@@ -30,7 +30,7 @@ public:
 
 	int32 GetBranchesAmount() const { return currentBranches; }
 	int32 GetMaxBranchesAmount() const { return MaxAmountBranches; }
-	ALightSource* GetCurrentLightSource();
+	ALightSource* GetCurrentLightSource() const { return currentLightSource; }
 
 	bool AddBranch();
 	void PutAllBranches();

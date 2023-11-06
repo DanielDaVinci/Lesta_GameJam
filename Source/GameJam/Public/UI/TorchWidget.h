@@ -14,5 +14,8 @@ class GAMEJAM_API UTorchWidget : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	float GetTorchPower() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	bool IsTorchVisible() const;
 	
 };

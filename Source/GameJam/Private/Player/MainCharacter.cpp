@@ -4,6 +4,9 @@
 #include "Player/MainCharacter.h"
 
 #include "LightSource.h"
+#include "MainPlayerController.h"
+#include "Animations/EndPickupAnimNotify.h"
+#include "Animations/StartPickupAnimNotify.h"
 #include "Camera/CameraComponent.h"
 #include "CentralObjects/Campfire.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -29,8 +32,8 @@ bool AMainCharacter::AddBranch()
 {
 	if (currentBranches >= MaxAmountBranches)
 		return false;
-
-	// TODO(Animation)
+	
+	PlayAnimMontage(PickupAnimMontage);
 
 	SetCurrentBranches(currentBranches + 1);
 	return true;
@@ -38,7 +41,7 @@ bool AMainCharacter::AddBranch()
 
 void AMainCharacter::PutAllBranches()
 {
-	// TODO(Animation)
+	PlayAnimMontage(PickupAnimMontage);
 
 	UGameplayStatics::PlaySoundAtLocation(GetWorld(), AddBranchesToCampfireSC, GetActorLocation());
 	SetCurrentBranches(0);
@@ -46,8 +49,6 @@ void AMainCharacter::PutAllBranches()
 
 void AMainCharacter::ExternalReloadTorch()
 {
-	// TODO(Animation)
-	
 	if (currentLightSource)
 	{
 		currentLightSource->Repower();
@@ -78,6 +79,8 @@ void AMainCharacter::BeginPlay()
 
 	currentBranches = 0;
 	currentLightSource = nullptr;
+
+	InitAnimations();
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -134,6 +137,48 @@ void AMainCharacter::OnTorchBurnOut()
 	currentLightSource->Detach();
 	currentLightSource->OnBurnOut.Unbind();
 	currentLightSource = nullptr;
+}
+
+void AMainCharacter::InitAnimations()
+{
+	if (!PickupAnimMontage)
+		return;
+	
+	const auto NotifyEvents = PickupAnimMontage->Notifies;
+	for (auto NotifyEvent : NotifyEvents)
+	{
+		auto StartPickupNotify = Cast<UStartPickupAnimNotify>(NotifyEvent.Notify);
+		if (StartPickupNotify)
+		{
+			StartPickupNotify->OnNotified.AddUObject(this, &AMainCharacter::StartPickupAnimation);
+			continue;
+		}
+
+		auto EndPickupNotify = Cast<UEndPickupAnimNotify>(NotifyEvent.Notify);
+		if (EndPickupNotify)
+		{
+			EndPickupNotify->OnNotified.AddUObject(this, &AMainCharacter::EndPickupAnimation);
+			continue;
+		}
+	}
+}
+
+void AMainCharacter::StartPickupAnimation()
+{
+	const auto playerController = Cast<AMainPlayerController>(Controller);
+	if (!playerController)
+		return;
+
+	playerController->DisableMovement();
+}
+
+void AMainCharacter::EndPickupAnimation()
+{
+	const auto playerController = Cast<AMainPlayerController>(Controller);
+	if (!playerController)
+		return;
+
+	playerController->EnableMovement();
 }
 
 void AMainCharacter::SetCurrentBranches(int32 Amount)

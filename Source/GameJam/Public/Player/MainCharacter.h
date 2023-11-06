@@ -60,6 +60,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	USoundCue* AddBranchesToCampfireSC;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* PickupAnimMontage;
+
 	virtual void BeginPlay() override;
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
@@ -80,7 +83,10 @@ private:
 	void Reload();
 
 	void InternalReloadTorch();
-
 	void AttachNewLightSource();
 	void OnTorchBurnOut();
+
+	void InitAnimations();
+	void StartPickupAnimation();
+	void EndPickupAnimation();
 };

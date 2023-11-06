@@ -6,6 +6,18 @@
 #include "MainCharacter.h"
 #include "GameFramework/Character.h"
 
+void AMainPlayerController::DisableMovement()
+{
+	bCanMove = false;
+	MoveForward(0);
+	MoveRight(0);
+}
+
+void AMainPlayerController::EnableMovement()
+{
+	bCanMove = true;
+}
+
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -29,12 +41,18 @@ void AMainPlayerController::TickActor(float DeltaTime, ELevelTick TickType, FAct
 
 void AMainPlayerController::MoveForward(float Amount)
 {
+	if (!bCanMove)
+		return;
+	
 	inputDirection.Y = -1 * Amount;
 	GetCharacter()->AddMovementInput(GetCharacter()->GetActorForwardVector(), Amount);
 }
 
 void AMainPlayerController::MoveRight(float Amount)
 {
+	if (!bCanMove)
+		return;
+	
 	inputDirection.X = Amount;
 	GetCharacter()->AddMovementInput(GetCharacter()->GetActorRightVector(), Amount);
 }

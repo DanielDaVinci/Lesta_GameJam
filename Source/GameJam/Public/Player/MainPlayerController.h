@@ -11,6 +11,13 @@ class GAMEJAM_API AMainPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	bool bCanMove = true;
+
+	void DisableMovement();
+	void EnableMovement();
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (ClampMin="0.0", ClampMax="500.0"))
 	float RotationSpeed = 100.0f;

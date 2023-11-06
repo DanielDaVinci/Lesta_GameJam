@@ -13,7 +13,7 @@ void UGameSessionTimer::InitializeTimer(UWorld* world)
 	TimeRemain = GameSessionTime;
 	
 	World = world;
-	World->GetTimerManager().SetTimer(Handle, this, &UGameSessionTimer::OnTimerTicked, TimerFrequency, true);
+	World->GetTimerManager().SetTimer(Handle, this, &UGameSessionTimer::OnTimerTicked, TimerFrequency, true, 1.0f);
 }
 
 FString UGameSessionTimer::GetCurrentTime() const

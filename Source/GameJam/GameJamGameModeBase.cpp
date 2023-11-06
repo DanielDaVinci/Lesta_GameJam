@@ -29,6 +29,7 @@ void AGameJamGameModeBase::BeginPlay()
 
 	if (GameSessionTimerClass)
 	{
+		ClearPause();
 		GameSessionTimer = NewObject<UGameSessionTimer>(this, GameSessionTimerClass);
 		GameSessionTimer->InitializeTimer(GetWorld());
 	}
@@ -37,11 +38,6 @@ void AGameJamGameModeBase::BeginPlay()
 void AGameJamGameModeBase::StartPlay()
 {
 	Super::StartPlay();
-
-	if (GameSessionTimer)
-	{
-		// GameSessionTimer->InitializeTimer(GetWorld());
-	}
 
 	SetGameInput();
 }

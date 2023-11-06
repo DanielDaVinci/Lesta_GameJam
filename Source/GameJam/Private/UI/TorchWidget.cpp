@@ -20,3 +20,14 @@ float UTorchWidget::GetTorchPower() const
 
     return PowerComponent->GetPower();
 }
+
+bool UTorchWidget::IsTorchVisible() const
+{
+    const auto Player = Cast<AMainCharacter>(GetOwningPlayerPawn());
+    if (!Player) return false;
+
+    const ALightSource* Torch = Player->GetCurrentLightSource();
+    if (!Torch) return false;
+
+    return true;
+}

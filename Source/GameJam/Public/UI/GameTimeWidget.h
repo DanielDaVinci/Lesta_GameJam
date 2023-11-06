@@ -4,18 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "TorchWidget.generated.h"
+#include "GameTimeWidget.generated.h"
 
 UCLASS()
-class GAMEJAM_API UTorchWidget : public UUserWidget
+class GAMEJAM_API UGameTimeWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:
+	public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
-	float GetTorchPower() const;
-
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	bool IsTorchVisible() const;
-	
+	FString GetRemainingTime() const;
 };

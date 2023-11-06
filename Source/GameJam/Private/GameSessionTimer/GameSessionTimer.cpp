@@ -27,7 +27,7 @@ FString UGameSessionTimer::GetCurrentTime() const
 
 void UGameSessionTimer::OnTimerTicked()
 {
-	TimeRemain -= TimerFrequency / GameSessionTime;
+	TimeRemain -= TimerFrequency;
 	TimeRemain = FMath::Max(TimeRemain, 0.0f);
 	
 	if (FMath::IsNearlyZero(TimeRemain) || !PlayerInLight())

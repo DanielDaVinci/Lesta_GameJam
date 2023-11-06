@@ -93,7 +93,9 @@ void ACampfire::BeginPlay()
 
 	InteractSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ACampfire::NotifyActorBeginInteractOverlap);
 	InteractSphereComponent->OnComponentEndOverlap.AddDynamic(this, &ACampfire::NotifyActorEndInteractOverlap);
+	
 	PowerComponent->OnValueUpdate.BindUObject(this, &ACampfire::OnPowerChangeValue);
+	PowerComponent->OnPowerEnd.AddUObject(this, &ACampfire::OnPowerEnd);
 	
 	SetInstanceOnGameMode();
 }
@@ -118,6 +120,11 @@ void ACampfire::OnPowerChangeValue(float Percent)
 
 	float newIntensity = Percent * MaxLightIntensity;
 	PointLightComponent->SetIntensity(newIntensity);
+}
+
+void ACampfire::OnPowerEnd()
+{
+	InteractSphereComponent->DestroyComponent();
 }
 
 void ACampfire::Interact(ACharacter* Character)

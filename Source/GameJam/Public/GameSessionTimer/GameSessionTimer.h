@@ -18,11 +18,14 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game")
-	int32 GameSessionTime = 300;
+	float GameSessionTime = 300;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game")
+	float TimerFrequency = 0.01f;
 
 private:
 	FTimerHandle Handle;
-	int32 TimeRemain = 300;
+	float TimeRemain = 300;
 	
 	UPROPERTY()
 	UWorld* World;

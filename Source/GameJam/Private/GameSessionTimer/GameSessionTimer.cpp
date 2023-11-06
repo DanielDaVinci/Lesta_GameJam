@@ -13,13 +13,13 @@ void UGameSessionTimer::InitializeTimer(UWorld* world)
 	TimeRemain = GameSessionTime;
 	
 	World = world;
-	World->GetTimerManager().SetTimer(Handle, this, &UGameSessionTimer::OnTimerTicked, 1.0f, true);
+	World->GetTimerManager().SetTimer(Handle, this, &UGameSessionTimer::OnTimerTicked, TimerFrequency, true);
 }
 
 FString UGameSessionTimer::GetCurrentTime() const
 {
-	const int32 minutes = TimeRemain / 60;
-	const int32 seconds = TimeRemain % 60;
+	const int32 minutes = FMath::CeilToInt(TimeRemain) / 60;
+	const int32 seconds = FMath::CeilToInt(TimeRemain) % 60;
 	FString formattedTime = FString::Printf(TEXT("%02d : %02d"), minutes, seconds);
 	
 	return formattedTime;
@@ -27,9 +27,10 @@ FString UGameSessionTimer::GetCurrentTime() const
 
 void UGameSessionTimer::OnTimerTicked()
 {
-	TimeRemain -= 1;
-
-	if (TimeRemain <= 0 || !PlayerInLight())
+	TimeRemain -= TimerFrequency / GameSessionTime;
+	TimeRemain = FMath::Max(TimeRemain, 0.0f);
+	
+	if (FMath::IsNearlyZero(TimeRemain) || !PlayerInLight())
 	{
 		World->GetTimerManager().ClearTimer(Handle);
 		

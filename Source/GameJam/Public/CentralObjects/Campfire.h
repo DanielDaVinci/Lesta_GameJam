@@ -61,6 +61,7 @@ private:
 
 	void SetInstanceOnGameMode();
 	void OnPowerChangeValue(float Percent);
+	void OnPowerEnd();
 
 	void Interact(ACharacter* Character);
 	void Reload(ACharacter* Character);
